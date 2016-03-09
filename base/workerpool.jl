@@ -15,7 +15,6 @@ end
 Create a WorkerPool from a vector of worker ids.
 """
 function WorkerPool(workers::Vector{Int})
-
     # Create a shared queue of available workers...
     pool = WorkerPool()
 
