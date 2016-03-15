@@ -389,12 +389,10 @@ Base.iteratorsize{N}(::Type{GenericIterator{N}}) = Base.SizeUnknown()
 function test_map(::Type{TestAbstractArray})
     for typ in (Float16, Float32, Float64,
                 Int8, Int16, Int32, Int64, Int128,
-                UInt8, UInt16, UInt32, UInt64, UInt128
-    ),
+                UInt8, UInt16, UInt32, UInt64, UInt128),
         arg_typ in (Integer,
                     Signed,
-                    Unsigned
-    )
+                    Unsigned)
         X = typ[1:10...]
         _typ = typeof(arg_typ(one(typ)))
         @test map(arg_typ, X) == _typ[1:10...]

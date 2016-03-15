@@ -374,7 +374,6 @@ end
 
 # FFTW module (may move to an external package at some point):
 if Base.USE_GPL_LIBS
-
     @doc """
         fft(A [, dims])
 
