@@ -61,22 +61,22 @@ function done(itr::AsyncMapIterator, state::AsyncMapState)
 end
 
 function next(itr::AsyncMapIterator, state::AsyncMapState)
-    # Wait if the maximum number of concurrent tasks are already running...
+    # Wait if the maximum number of concurrent tasks are already running
     while isbusy(itr, state)
         wait(state)
     end
 
-    # Get index and mapped function arguments from enumeration iterator...
+    # Get index and mapped function arguments from enumeration iterator
     (i, args), state.enum_state = next(itr.arg_enum, state.enum_state)
 
-    # Execute function call and save result asynchronously...
+    # Execute function call and save result asynchronously
     @async begin
         itr.results[i] = itr.f(args...)
         state.active_count -= 1
         notify(state.task_done, nothing)
     end
 
-    # Count number of concurrent tasks...
+    # Count number of concurrent tasks
     state.active_count += 1
 
     return (nothing, state)
@@ -115,7 +115,7 @@ function done(itr::StreamMapIterator, state::StreamMapState)
     done(itr.async_itr, state.async_state) && isempty(itr.async_itr.results)
 end
 
-# Pump the source async iterator if it is not already busy...
+# Pump the source async iterator if it is not already busy
 function pump_source(itr::StreamMapIterator, state::StreamMapState)
     if !isbusy(itr.async_itr, state.async_state) &&
        !done(itr.async_itr, state.async_state)
@@ -131,8 +131,7 @@ function next(itr::StreamMapIterator, state::StreamMapState)
 
     results = itr.async_itr.results
     while !haskey(results, state.i)
-
-        # Wait for results to become available...
+        # Wait for results to become available
         if !pump_source(itr,state) && !haskey(results, state.i)
             wait(state.async_state)
         end
