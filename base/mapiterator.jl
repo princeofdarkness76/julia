@@ -83,7 +83,6 @@ function next(itr::AsyncMapIterator, state::AsyncMapState)
 end
 
 
-
 """
     StreamMapIterator(f, c...; ntasks=100) -> iterator
 
