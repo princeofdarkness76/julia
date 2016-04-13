@@ -722,6 +722,7 @@ static jl_lambda_info_t *expr_to_lambda(jl_expr_t *f)
     return li;
 }
 
+extern void (*jl_newmeth_tracer)(jl_lambda_info_t *tracee);
 JL_DLLEXPORT void jl_method_def(jl_svec_t *argdata, jl_lambda_info_t *f, jl_value_t *isstaged)
 {
     // argdata is svec({types...}, svec(typevars...))
@@ -787,6 +788,8 @@ JL_DLLEXPORT void jl_method_def(jl_svec_t *argdata, jl_lambda_info_t *f, jl_valu
         f->code = jl_compress_ast(f, f->code);
         jl_gc_wb(f, f->code);
     }
+    if (jl_newmeth_tracer)
+        jl_newmeth_tracer(f);
     JL_GC_POP();
 }
 

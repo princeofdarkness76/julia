@@ -465,6 +465,8 @@ static int is_kind(jl_value_t *v)
 static jl_value_t *ml_matches(jl_methlist_t *ml, jl_value_t *type,
                               jl_sym_t *name, int lim);
 
+extern void (*jl_linfo_tracer)(jl_lambda_info_t *tracee);
+
 static jl_lambda_info_t *cache_method(jl_methtable_t *mt, jl_tupletype_t *type,
                                       jl_lambda_info_t *method, jl_methlist_t *m,
                                       jl_svec_t *sparams)
@@ -839,6 +841,8 @@ static jl_lambda_info_t *cache_method(jl_methtable_t *mt, jl_tupletype_t *type,
     }
     JL_GC_POP();
     JL_UNLOCK(codegen);
+    if (method->traced)
+        jl_linfo_tracer(method);
     return newmeth;
 }
 
