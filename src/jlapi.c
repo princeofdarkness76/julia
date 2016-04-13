@@ -314,13 +314,13 @@ JL_DLLEXPORT void jl_trace_linfo(jl_lambda_info_t *li)
     li->traced = 1;
 }
 
-void (*jl_linfo_tracer)(jl_lambda_info_t *tracee);
+void (*jl_linfo_tracer)(jl_lambda_info_t *tracee) = 0;
 JL_DLLEXPORT void jl_register_tracer(void (*callback)(jl_lambda_info_t *tracee))
 {
     jl_linfo_tracer = callback;
 }
 
-void (*jl_newmeth_tracer)(jl_lambda_info_t *tracee);
+void (*jl_newmeth_tracer)(jl_lambda_info_t *tracee) = 0;
 JL_DLLEXPORT void jl_register_newmeth_tracer(void (*callback)(jl_lambda_info_t *tracee))
 {
     jl_newmeth_tracer = callback;
